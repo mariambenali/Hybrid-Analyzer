@@ -1,12 +1,11 @@
-from gemini_services import TourismFactor, TourismAnalysis
+from gemini_services import gemini_result
 from hf_services import prompt
-
 
 
 def hybrd_analyzer(text:str):
     hf_result = prompt(text)
 
-    gemini_result = (TourismFactor, TourismAnalysis(text))
+    gemini_result = (gemini_result(text))
 
     return {
         "huggingface_classification": hf_result,

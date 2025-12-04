@@ -3,7 +3,7 @@ import requests
 
 
 
-def prompt(text:input):
+def prompt(text:str):
 
     API_URL = "https://router.huggingface.co/hf-inference/models/facebook/bart-large-mnli"
     headers = {
@@ -14,9 +14,16 @@ def prompt(text:input):
         "parameters": {"candidate_labels": ["tourisme", "climat", "hôtels", "transport", "culture"]},
     }
 
-   
     response = requests.post(API_URL, headers=headers, json=payload)
-    return response.json()
 
-result = prompt("Agadir est une destination très visitée...")
-print(result)
+    data = response.json()   # C'est UNE LISTE de dictionnaires
+
+    # Trouver l’élément avec le score max
+    best_item = max(data, key=lambda x: x["score"])
+
+    return best_item["label"]
+
+
+myprompt = prompt("Agadir est une destination très visitée...")
+
+print(myprompt)
