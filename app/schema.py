@@ -27,3 +27,4 @@ class Response_Analyzer(BaseModel):
     ton : str
     sumary : str
     category : str
+    score : int

@@ -1,5 +1,5 @@
 from google import genai
-from config import GEMINI_key
+from .config import GEMINI_key
 from google.genai import types
 from pydantic import BaseModel, Field
 from typing import Literal 
@@ -39,7 +39,8 @@ def gemini_result(prompt):
     print(result)
 
     return result
+if __name__ == "__main__":
+    prompt = "Agadir attire chaque année de nombreux visiteurs grâce à sa plage ensoleillée,sa corniche moderne, et ses infrastructures touristiques en développement.Cependant, la ville doit faire face à la saisonnalité du tourism et à la nécessité de diversifier son offre.Retourne le résultat UNIQUEMENT en JSON."
 
-prompt = "Agadir attire chaque année de nombreux visiteurs grâce à sa plage ensoleillée,sa corniche moderne, et ses infrastructures touristiques en développement.Cependant, la ville doit faire face à la saisonnalité du tourism et à la nécessité de diversifier son offre.Retourne le résultat UNIQUEMENT en JSON."
+    gemini_result(prompt)
 
-gemini_result(prompt)

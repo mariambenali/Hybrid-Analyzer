@@ -5,6 +5,7 @@ from app.models import User
 from app.hasher import hashed_password
 from fastapi import FastAPI ,Depends, HTTPException, Header
 from services.config import SECRET_KEY, ALGORITHM
+from services.analyzer_services import hybrd_analyzer
 from fastapi.security import  HTTPBearer,HTTPBasicCredentials
 from jose import jwt
 
@@ -53,4 +54,10 @@ def get_token(token:HTTPBasicCredentials = Depends(type_token)):
     except Exception as e:
         raise HTTPException(status_code=401, detail="Verify Token")
     
+
+@app.post("/analyzer")
+def analyzer(text:str):
+    var = hybrd_analyzer(text)
+
+    return var
 
