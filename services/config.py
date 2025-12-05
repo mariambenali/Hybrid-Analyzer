@@ -10,3 +10,4 @@ ALGORITHM=os.getenv("ALGORITHM")
 HF_TOKEN=os.getenv("HF_TOKEN")
 GEMINI_key=os.getenv("GEMINI_KEY")
 
+

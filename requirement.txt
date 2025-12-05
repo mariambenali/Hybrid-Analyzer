@@ -1,3 +1,9 @@
 google-genai
 fastapi
 python-dotenv
+pydantic
+uvicorn
+sqlalchemy
+psycopg2-binary
+bcrypt
+python-jose
