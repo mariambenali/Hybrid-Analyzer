@@ -23,6 +23,6 @@ def hagginface_classifier(text:str):
 
     return best_item["label"], best_item["score"]
 
-'''
-text = hagginface_classifier("Agadir est une destination très visitée...")
+
+'''if __name__ == "__main__":text = hagginface_classifier("Agadir est une destination très visitée...")
 print(text)'''

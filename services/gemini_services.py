@@ -38,7 +38,7 @@ def gemini_result(text, category, score):
                }
     )
     
-    result= ResponsAnalysis.model_validate_json(response.text)
+    result= response.text
     print(result)
 
     return result
