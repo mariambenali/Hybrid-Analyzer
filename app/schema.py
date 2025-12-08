@@ -22,9 +22,9 @@ class Analyzer(BaseModel):
     text : str
 
 
-
-class Response_Analyzer(BaseModel):
+class ResponseAnalyzer(BaseModel):
     ton : str
-    sumary : str
+    summary : str
     category : str
-    score : int
+    score : float
+

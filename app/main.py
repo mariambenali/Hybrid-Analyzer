@@ -1,11 +1,11 @@
-from app.schema import UserCreate, UserLogin
+from app.schema import UserCreate, UserLogin ,ResponseAnalyzer, Analyzer
 from sqlalchemy.orm import Session
 from app.database import engine, get_db, Base
-from app.models import User
+from app.models import User, AnalysisLog
 from app.hasher import hashed_password
-from fastapi import FastAPI ,Depends, HTTPException, Header
+from fastapi import FastAPI ,Depends, HTTPException
 from services.config import SECRET_KEY, ALGORITHM
-from services.analyzer_services import hybrd_analyzer
+from services.gemini_services import hybrd_analyzer
 from fastapi.security import  HTTPBearer,HTTPBasicCredentials
 from jose import jwt
 
@@ -54,10 +54,21 @@ def get_token(token:HTTPBasicCredentials = Depends(type_token)):
     except Exception as e:
         raise HTTPException(status_code=401, detail="Verify Token")
     
+@app.post("/analyzer", response_model=ResponseAnalyzer)
+def analyzer(payload: Analyzer, db: Session = Depends(get_db)):
+    data = hybrd_analyzer(payload.text)  #le resultat sera sous forme de dict {"ton": "neutre","summary": "Rio ..","category": "culture","score": 0.33346375823020935}
 
-@app.post("/analyzer")
-def analyzer(text:str):
-    var = hybrd_analyzer(text)
+    #on va créer un objet pour la base de donnée
+    db_log = AnalysisLog(
+        
+        ton = data.ton,
+        summary = data.summary,
+       category = data.category,
+        score = data.score
+    )
 
-    return var
-
+    db.add(db_log)
+    db.commit()
+    db.refresh(db_log)
+    
+    return data

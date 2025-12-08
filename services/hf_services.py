@@ -3,7 +3,7 @@ import requests
 
 
 
-def prompt(text:str):
+def hagginface_classifier(text:str):
 
     API_URL = "https://router.huggingface.co/hf-inference/models/facebook/bart-large-mnli"
     headers = {
@@ -21,9 +21,8 @@ def prompt(text:str):
     # Trouver l’élément avec le score max
     best_item = max(data, key=lambda x: x["score"])
 
-    return best_item["label"]
+    return best_item["label"], best_item["score"]
 
-
-myprompt = prompt("Agadir est une destination très visitée...")
-
-print(myprompt)
+'''
+text = hagginface_classifier("Agadir est une destination très visitée...")
+print(text)'''
