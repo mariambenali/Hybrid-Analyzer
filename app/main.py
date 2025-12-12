@@ -2,18 +2,31 @@ from app.schema import UserCreate, UserLogin ,ResponseAnalyzer, Analyzer
 from sqlalchemy.orm import Session
 from app.database import engine, get_db, Base
 from app.models import User, AnalysisLog
-from app.hasher import hashed_password
+from app.hasher import hashed_password, verify_password
 from fastapi import FastAPI ,Depends, HTTPException
 from services.config import SECRET_KEY, ALGORITHM
 from services.gemini_services import hybrd_analyzer
 from fastapi.security import  HTTPBearer,HTTPBasicCredentials
+from fastapi.middleware.cors import CORSMiddleware
 from jose import jwt
+
 
 
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
 type_token= HTTPBearer()
+
+origins = [
+    "http://localhost:3000", 
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 
@@ -31,15 +44,15 @@ def register(user:UserCreate, db: Session = Depends(get_db)):
 
 @app.post("/login")
 def login(user:UserLogin , db:Session = Depends(get_db)):
-    user_login = db.query(User).filter(user.username == User.username).first()
+    user_login = db.query(User).filter(User.username == user.username).first()
 
     if not user_login:
         raise HTTPException(status_code=404, detail="User not found")
-    elif user.password != user_login.password:
+    elif not verify_password(user.password, user_login.password):
         raise HTTPException(status_code=401, detail="Invalid password")
     
 
-    payload = {"username ": user.username}
+    payload = {"username": user.username}
     token=jwt.encode(payload,SECRET_KEY,algorithm=ALGORITHM)
 
     return token
@@ -61,10 +74,10 @@ def analyzer(payload: Analyzer, db: Session = Depends(get_db)):
     #on va créer un objet pour la base de donnée
     db_log = AnalysisLog(
         
-        ton = data.ton,
-        summary = data.summary,
-       category = data.category,
-        score = data.score
+        ton = data["ton"],
+        summary = data["summary"],
+        category = data["category"],
+        score = data["score"],
     )
 
     db.add(db_log)
