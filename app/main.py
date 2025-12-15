@@ -9,6 +9,7 @@ from services.gemini_services import hybrd_analyzer
 from fastapi.security import  HTTPBearer,HTTPBasicCredentials
 from fastapi.middleware.cors import CORSMiddleware
 from jose import jwt
+import json
 
 
 
@@ -67,21 +68,18 @@ def get_token(token:HTTPBasicCredentials = Depends(type_token)):
     except Exception as e:
         raise HTTPException(status_code=401, detail="Verify Token")
     
-@app.post("/analyzer", response_model=ResponseAnalyzer)
+@app.post("/analyzer")
 def analyzer(payload: Analyzer, db: Session = Depends(get_db)):
-    data = hybrd_analyzer(payload.text)  #le resultat sera sous forme de dict {"ton": "neutre","summary": "Rio ..","category": "culture","score": 0.33346375823020935}
+    data = hybrd_analyzer(payload.text)  
 
-    #on va créer un objet pour la base de donnée
-    db_log = AnalysisLog(
-        
-        ton = data["ton"],
-        summary = data["summary"],
-        category = data["category"],
-        score = data["score"],
+    newdata =AnalysisLog(
+        summary = data.summary,
+        ton = data.ton,
+        score = data.score,
+        category = data.category,
     )
-
-    db.add(db_log)
+    db.add(newdata)
     db.commit()
-    db.refresh(db_log)
-    
-    return data
+    db.refresh(newdata)
+
+    return newdata

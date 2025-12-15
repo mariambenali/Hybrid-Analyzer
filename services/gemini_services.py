@@ -34,12 +34,12 @@ def gemini_result(text, category, score):
                 Retourne la réponse UNIQUEMENT en JSON respectant strictement ce schéma  indiquant la category et le score: """,
 
         config={"response_mime_type": "application/json",
-                "response_schema": ResponsAnalysis,
+                "response_schema": ResponsAnalysis.model_json_schema(),
                }
     )
     
-    result= response.text
-    print(result)
+    result=ResponsAnalysis.model_validate_json(response.text)
+
 
     return result
 

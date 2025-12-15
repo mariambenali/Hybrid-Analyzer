@@ -1,9 +1,11 @@
 
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // URL de base de votre backend
 const API_URL = "http://127.0.0.1:8000"; 
+
 
 // Composant réutilisable pour les cartes (même celui utilisé précédemment pour la propreté)
 const MetricCard = ({ title, value, color, details }) => {
@@ -38,6 +40,11 @@ export default function Page() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
    
+    const router = useRouter();
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        router.push("/"); 
+      };
 
     // Fonction pour envoyer la requête POST au backend
     const handleAnalysis = async (e) => {
@@ -53,7 +60,7 @@ export default function Page() {
         setSummary("Analyse en cours..."); 
 
         try {
-            const response = await fetch(`${API_URL}/analyzer`,{
+            const response = await fetch(`http://127.0.0.1:8000/analyzer`,{
                 method: "POST",
                 headers: {'Content-Type': 'application/json',},
                 body: JSON.stringify({text: inputText})
@@ -64,6 +71,7 @@ export default function Page() {
             }
 
             const data = await response.json();
+            console.log(data)
             
             setSummary(data.summary);
             setTon(data.ton);
@@ -88,7 +96,7 @@ export default function Page() {
             
             <header className="bg-black/90 shadow-2xl flex justify-between items-center p-3 py-3">
                 <h3 className="ml-20 text-xl font-bold">Dashboard</h3>
-                <button className="mr-20 px-4 py-2 bg-red-600 rounded hover:bg-red-700 transition duration-300">Logout</button>
+                <button className="mr-20 px-4 py-2 bg-red-600 rounded hover:bg-red-700 transition duration-300" onClick={handleLogout}>Logout</button>
             </header>
 
            
