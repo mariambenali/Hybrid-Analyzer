@@ -69,7 +69,7 @@ export default function Page() {
   };
 
   return (
-    <div className="bg-[url('/images/11.jpg')] bg-cover bg-center flex items-center justify-center min-h-screen">
+    <div className="bg-[url('/images/02.jpg')] bg-cover bg-center flex items-center justify-center min-h-screen">
       <form
         onSubmit={isSignup ? handleSignup : handleSubmit}
         className="bg-black/90 shadow-2xl font-poppins p-8 rounded-xl w-full max-w-sm space-y-4"

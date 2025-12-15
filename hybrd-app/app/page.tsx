@@ -19,15 +19,10 @@ export default function HomePage() {
             onClick={() => router.push("/login")}
             className="px-6 py-2 rounded-full border border-cyan-400 text-cyan-300 hover:bg-cyan-400 hover:text-black transition"
           >
-            LOG IN
+            Click here to connect
           </button>
 
-          <button
-            onClick={() => router.push("/login")}
-            className="px-6 py-2 rounded-full border border-pink-400 text-pink-300 hover:bg-pink-400 hover:text-black transition"
-          >
-            SIGN UP
-          </button>
+          
         </div>
 
         <p className="text-white mt-6 font-bold">L'outil IA qui transforme l'information en clarté.</p>
